@@ -13,50 +13,70 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class ImageEditor extends ApplicationAdapter {
+	public static ImageEditor Instance;
+
 	SpriteBatch batch;
 	Texture img;
-	Rec2D rectangleMap;
-	private Vector2 _screenSize;
+
+	Button button1;
+	Button button2;
+	Button button3;
+	Button button4;
+	Button button5;
+	public Vector2 _screenSize;
 	@Override
 	public void create () {
-		_screenSize = new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
+		InputManager inputManager = new InputManager();
+		Gdx.input.setInputProcessor(inputManager);
+
+		Instance = this;
 		batch = new SpriteBatch();
-		rectangleMap = new Rec2D(new Vector2(200,100), new Vector2(200,200),new Vector2(5,4), Color.RED);
+		_screenSize = new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
+		
+		Vector2 rectangleScale = new Vector2(50,50);
+		button1 = new Button(
+				rectangleScale,
+				new Vector2(_screenSize.x / 2f - rectangleScale.x, _screenSize.y/2f-rectangleScale.y/2f),Color.WHITE);
+		button2 = new Button(
+				rectangleScale,
+				new Vector2(_screenSize.x/2f + rectangleScale.x * 2,_screenSize.y/2f - rectangleScale.y*2),Color.GREEN);
+		button3 = new Button(
+				rectangleScale, 
+				new Vector2(_screenSize.x/2f + rectangleScale.x*2, _screenSize.y/2f + rectangleScale.y*2),Color.BLUE);
+		button4 = new Button(
+				rectangleScale, 
+				new Vector2(_screenSize.x/2 - rectangleScale.x*4, _screenSize.y/2f + rectangleScale.y*2),Color.RED);
+		button5 = new Button(
+				rectangleScale, 
+				new Vector2(_screenSize.x/2 - rectangleScale.x*4, _screenSize.y/2f - rectangleScale.y*2),Color.ORANGE);
+		CollisionManager collisionManager = new CollisionManager();
+
+
+
+
 	}
+	
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(0, 0, 0, 1);
 		batch.begin();
-		batch.draw(rectangleMap.RecTexture, rectangleMap.Position.x, rectangleMap.Position.y);
-		if(rectangleMap.Position.x > (_screenSize.x - rectangleMap.Scale.x)) {
-			rectangleMap.Velocity.x = rectangleMap.Velocity.x * -1;
-			Random random = new Random();
-			rectangleMap.changeColor(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1));
-			
-		}
-		if(rectangleMap.Position.x < 0) {
-			rectangleMap.Velocity.x = rectangleMap.Velocity.x * -1;
-			Random random = new Random();
-			rectangleMap.changeColor(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1));
-		}
-		if(rectangleMap.Position.y < 0) {
-			rectangleMap.Velocity.y = rectangleMap.Velocity.y * -1;
-			Random random = new Random();
-			rectangleMap.changeColor(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1));
-		}
-		if(rectangleMap.Position.y > (_screenSize.y - rectangleMap.Scale.y)) {
-			rectangleMap.Velocity.y = rectangleMap.Velocity.y * -1;
-			Random random = new Random();
-			rectangleMap.changeColor(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat(), 1));
-		}
-		rectangleMap.Position.add(rectangleMap.Velocity);
+		batch.draw(button1.RecTexture, button1.Position.x,button1.Position.y);
+		batch.draw(button2.RecTexture, button2.Position.x, button2.Position.y);
+		batch.draw(button3.RecTexture, button3.Position.x, button3.Position.y);
+		batch.draw(button4.RecTexture, button4.Position.x, button4.Position.y);
+		batch.draw(button5.RecTexture, button5.Position.x, button5.Position.y);
+
 		batch.end();
 	}
 	
 	@Override
 	public void dispose () {
 		batch.dispose();
-		img.dispose();
 	}
+	
 }
+
+
