@@ -3,25 +3,61 @@ package com.mygdx.imageeditor;
 import com.badlogic.gdx.math.Vector2;
 
 public class CollisionManager {
-	public static CollisionManager Instance;
+	public CollisionManager Instance;
 	
 	public CollisionManager() {
 		Instance = this;
 
 	}
+	
+	public static IHoverable getHovered(Vector2 coordinates) {
+		Rec2D hovered;
+		for(int i = 0; i < InputManager.Instance.HoverableItem.size; i++) {
+			hovered = (Rec2D) InputManager.Instance.HoverableItem.get(i);
+		if(coordinates.x > hovered.Position.x) {
+			if(coordinates.x < (hovered.Position.x) + hovered.Scale.x) {
+					if(coordinates.y > hovered.Position.y) {
+						if(coordinates.y < (hovered.Position.y + hovered.Scale.y)) {
+							return (IHoverable) hovered;
+		}
+		}
+		}
+		}
+		}
+		return null;
+		
+		
+		
+	}
+	public IClickable getClicked(Vector2 coordinates) {
+
+		Rec2D iteratingButton;
+		
+		for(int i = 0; i < InputManager.Instance.ClickableItem.size; i++) {
+			iteratingButton = (Rec2D) InputManager.Instance.ClickableItem.get(i);
+		if(coordinates.x > iteratingButton.Position.x) {
+			if(coordinates.x < (iteratingButton.Position.x) + iteratingButton.Scale.x) {
+					if(coordinates.y > iteratingButton.Position.y) {
+						if(coordinates.y < (iteratingButton.Position.y + iteratingButton.Scale.y)) {
+							return (IClickable) iteratingButton;
+		}
+		}
+		}
+		}
+		}
+		return null;
+		
+	}
+	
+	
 	public Button getCollision(Vector2 coordinates) {
 		Button iteratingButton;
 		for(int i = 0; i < InputManager.Instance.Buttons.size; i++) {
 			iteratingButton = InputManager.Instance.Buttons.get(i);
-//			System.out.println(iteratingButton.Position.x);
-//			System.out.println(iteratingButton.Position.x  + iteratingButton.Scale.x);
-//			System.out.println(iteratingButton.Position.y);
-//			System.out.println(iteratingButton.Position.y + iteratingButton.Scale.y);
 		if(coordinates.x > iteratingButton.Position.x) {
-			if(coordinates.x < (iteratingButton.Position.x) + iteratingButton.Scale.x * 2) {
+			if(coordinates.x < (iteratingButton.Position.x) + iteratingButton.Scale.x) {
 					if(coordinates.y > iteratingButton.Position.y) {
-						if(coordinates.y < (iteratingButton.Position.y + iteratingButton.Scale.y * 2 )) {
-							System.out.println("Pressed Button " + (i + 1));
+						if(coordinates.y < (iteratingButton.Position.y + iteratingButton.Scale.y)) {
 							return iteratingButton;
 		}
 		}

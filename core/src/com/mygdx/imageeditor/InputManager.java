@@ -7,6 +7,11 @@ import com.badlogic.gdx.utils.Array;
 public class InputManager implements InputProcessor{
 	public static InputManager Instance;
 	public Array<Button> Buttons = new Array<Button>();
+	public Array<IClickable> ClickableItem = new Array<IClickable>();
+	public Array<IHoverable> HoverableItem = new Array<IHoverable>();
+	private IClickable _currentlyClicked;
+	public IHoverable _currentlyHoverable;
+	private Button lastHoveredButton;
 
 	@Override
 	public boolean keyDown(int keycode) { 
@@ -35,18 +40,14 @@ public class InputManager implements InputProcessor{
 	
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-//		Rec2D collision = CollisionManager.Instance.getCollision(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY));
-//		if(collision == ImageEditor.Instance.rectangle) {
-//			System.out.println("Button 1 Pressed");
-//		}
-//		if(collision == ImageEditor.Instance.rectangle2) {
-//			System.out.println("Button 2 Pressed");
-//		}
-		
-		if(collisionManager.getCollision(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY))!= null) {
-			Button.onPressed();
-			
+		IClickable x = collisionManager.getClicked(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY));
+		if(collisionManager.getClicked(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY))!= null) {
+			x = collisionManager.getClicked(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY));
+			x.onClickDown(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY));
+
 		}
+		_currentlyClicked = x;
+
 
 
 		return true;
@@ -54,8 +55,11 @@ public class InputManager implements InputProcessor{
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
+		if(_currentlyClicked != null) {
+			_currentlyClicked.onClickUp(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY));
+		}
+		
+		return true;
 	}
 
 	@Override
@@ -66,13 +70,22 @@ public class InputManager implements InputProcessor{
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
+		mouseMoved(screenX, screenY);
+		if(_currentlyClicked != null) {
+			_currentlyClicked.onClickDragged(new Vector2(screenX,ImageEditor.Instance._screenSize.y-screenY));
+		}
 		return false;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		// TODO Auto-generated method stub
+		IHoverable collision = collisionManager.Instance.getHovered(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY));
+		if(collision == null && _currentlyHoverable != null) {_currentlyHoverable.onHoveredExit();}
+		if(collision != null) {
+			collision.onHovered();
+		_currentlyHoverable = collision;
+		}
+		
 		return true;
 	}
 

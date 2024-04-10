@@ -19,9 +19,10 @@ public class Rec2D {
 		this.Position = position;
 		this._recColor = color;
 		generateTexture();
+		ImageEditor.getInstance().Rectangles.add(this);
 	}
 	
-private void generateTexture() {
+public void generateTexture() {
 	_pixelMap = new Pixmap(100, 100,Format.RGBA8888);
 	_pixelMap.setColor(_recColor);
 	for(int x = 0; x < _pixelMap.getWidth(); x++) {
