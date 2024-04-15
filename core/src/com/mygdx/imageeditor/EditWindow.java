@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class EditWindow extends Rec2D implements IClickable{
 	public static Texture DoodleTexture;
+	private Vector2 _previousPaintPosition;
 	private Pixmap _doodleMap;
 	public EditWindow(Vector2 scale, Vector2 position, Color color) {
 		super(scale, position, color);
@@ -24,13 +25,26 @@ public class EditWindow extends Rec2D implements IClickable{
 		int reversedY = (int) (_doodleMap.getHeight() - mousePosition.y);
 		int offSetX = (int) (ImageEditor.Instance._screenSize.x  - _doodleMap.getWidth() );
 
-		
+		if(_previousPaintPosition == null) {
+			_previousPaintPosition = new Vector2(mousePosition.x-Position.x,Scale.y-mousePosition.y);
+		}
 		_doodleMap.drawPixel((int)(mousePosition.x - offSetX),(int)(reversedY));
 		DoodleTexture = new Texture(_doodleMap);
 	}
 	
 	private void paintAtPosition(Vector2 worldPosition) {
-		_doodleMap.drawPixel((int) (worldPosition.x - Position.x), (int)(Scale.y-worldPosition.y));
+		Vector2 paintPosition = new Vector2(worldPosition.x - Position.x,Scale.y-worldPosition.y);
+		int startX= (int) _previousPaintPosition.x;
+		int startY = (int) _previousPaintPosition.y;
+		int endX = (int)paintPosition.x;
+		int endY = (int) paintPosition.y;
+		_doodleMap.drawLine(startX, startY, endX, endY);
+		_doodleMap.drawLine(startX+1, startY, endX+1, endY);
+		_doodleMap.drawLine(startX-1, startY, endX-1, endY);
+
+//		
+
+		_previousPaintPosition = paintPosition;
 		DoodleTexture = new Texture(_doodleMap);
 	}
 
@@ -43,7 +57,9 @@ public class EditWindow extends Rec2D implements IClickable{
 
 	@Override
 	public void onClickUp(Vector2 mousePosition) {
-		paintAtPosition(mousePosition);
+//		paintAtPosition(mousePosition);
+
+		_previousPaintPosition =null;
 		
 	}
 

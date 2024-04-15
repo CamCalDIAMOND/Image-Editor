@@ -8,7 +8,7 @@ import com.mygdx.imageeditor.ImageEditor;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-		config.setForegroundFPS(60);
+		config.setForegroundFPS(8000);
 		config.setTitle("ImageEditor");
 		config.setWindowedMode(584, 480);
 		System.out.println("Project made by: Camden Calandrino");

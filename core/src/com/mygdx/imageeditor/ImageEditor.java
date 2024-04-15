@@ -31,6 +31,8 @@ public class ImageEditor extends ApplicationAdapter {
 		Gdx.input.setInputProcessor(inputManager);
 
 		Instance = this;
+		new ImageInputOutput();
+		Pixmap editMap = ImageInputOutput.Instance.loadImage("blackbuck.bmp");
 		batch = new SpriteBatch();
 		_screenSize = new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		Vector2 editWindowSize = new Vector2(500, _screenSize.y-40);
@@ -40,20 +42,9 @@ public class ImageEditor extends ApplicationAdapter {
 		button1 = new Button(
 				rectangleScale,
 				new Vector2(_screenSize.x/2 - rectangleScale.x*5, _screenSize.y/2f-rectangleScale.y*2f),Color.ORANGE);
-//		button2 = new Button(
-//				rectangleScale,
-//				new Vector2(_screenSize.x/2f + rectangleScale.x * 2,_screenSize.y/2f - rectangleScale.y*2),Color.GREEN);
-//		button3 = new Button(
-//				rectangleScale, 
-//				new Vector2(_screenSize.x/2f + rectangleScale.x*2, _screenSize.y/2f + rectangleScale.y*2),Color.BLUE);
-//		button4 = new Button(
-//				rectangleScale, 
-//				new Vector2(_screenSize.x/2 - rectangleScale.x*4, _screenSize.y/2f + rectangleScale.y*2),Color.RED);
-//		button5 = new Button(
-//				rectangleScale, 
-//				new Vector2(_screenSize.x/2 - rectangleScale.x*4, _screenSize.y/2f - rectangleScale.y*2),Color.ORANGE);
-		CollisionManager collisionManager = new CollisionManager();
+		editWindow.DoodleTexture = new Texture(editMap);
 
+		CollisionManager collisionManager = new CollisionManager();
 
 
 
