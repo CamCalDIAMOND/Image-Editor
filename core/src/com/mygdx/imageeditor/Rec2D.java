@@ -22,6 +22,7 @@ public class Rec2D {
 		ImageEditor.getInstance().Rectangles.add(this);
 	}
 	
+	
 public void generateTexture() {
 	_pixelMap = new Pixmap(100, 100,Format.RGBA8888);
 	_pixelMap.setColor(_recColor);
