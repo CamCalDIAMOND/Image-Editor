@@ -6,19 +6,23 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.math.Vector2;
 
+import Utility.ImageEditor;
+
 public class Rec2D {
 	public Vector2 Scale;
 	public Vector2 Position;
 	public Texture RecTexture;
 	private Pixmap _pixelMap;
-	private Color _recColor;
+	protected Color _recColor;
+	public Outline Outline;
 
-
+	
 	public Rec2D(Vector2 scale, Vector2 position, Color color) {
-		this.Scale = scale;
-		this.Position = position;
-		this._recColor = color;
+		Scale = scale;
+		Position = position;
+		_recColor = color;
 		generateTexture();
+		Outline = new Outline(scale, Color.BLACK, 1);
 		ImageEditor.getInstance().Rectangles.add(this);
 	}
 	

@@ -6,6 +6,13 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.buttons.Button;
+
+import Utility.CollisionManager;
+import Utility.IClickable;
+import Utility.IHoverable;
+import Utility.ImageEditor;
+import Utility.ImageInputOutput;
 
 public class InputManager implements InputProcessor{
 	public static InputManager Instance;
@@ -24,7 +31,11 @@ public class InputManager implements InputProcessor{
 		}
 		if(_controlPressed && keycode == Keys.S) {
 			try {
-				ImageInputOutput.Instance.saveImage("C:\\Users\\camca\\Downloads\\output.bmp");
+				if(ImageInputOutput.ImageFolderLocation != null) {
+					ImageInputOutput.Instance.saveImage(ImageInputOutput.Instance.ImageFolderLocation + "\\output.bmp");
+
+				}
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -55,13 +66,16 @@ public class InputManager implements InputProcessor{
 	
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		IClickable x = collisionManager.getClicked(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY));
-		if(collisionManager.getClicked(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY))!= null) {
-			x = collisionManager.getClicked(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY));
-			x.onClickDown(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY));
-
+		
+		
+		IClickable x = collisionManager.getClicked(new Vector2(screenX,ImageEditor.Instance.ScreenSize.y - screenY));
+		
+		if(collisionManager.getClicked(new Vector2(screenX,ImageEditor.Instance.ScreenSize.y - screenY))!= null) {
+			x = collisionManager.getClicked(new Vector2(screenX,ImageEditor.Instance.ScreenSize.y - screenY));
+			x.onClickDown(new Vector2(screenX,ImageEditor.Instance.ScreenSize.y - screenY));
 		}
 		_currentlyClicked = x;
+
 
 
 
@@ -71,7 +85,7 @@ public class InputManager implements InputProcessor{
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		if(_currentlyClicked != null) {
-			_currentlyClicked.onClickUp(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY));
+			_currentlyClicked.onClickUp(new Vector2(screenX,ImageEditor.Instance.ScreenSize.y - screenY));
 		}
 		
 		return true;
@@ -86,20 +100,32 @@ public class InputManager implements InputProcessor{
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		mouseMoved(screenX, screenY);
+		
 		if(_currentlyClicked != null) {
-			_currentlyClicked.onClickDragged(new Vector2(screenX,ImageEditor.Instance._screenSize.y-screenY));
+			_currentlyClicked.onClickDragged(new Vector2(screenX,ImageEditor.Instance.ScreenSize.y-screenY));
 		}
 		return false;
 	}
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
-		IHoverable collision = collisionManager.Instance.getHovered(new Vector2(screenX,ImageEditor.Instance._screenSize.y - screenY));
-		if(collision == null && _currentlyHoverable != null) {_currentlyHoverable.onHoveredExit();}
+		IHoverable collision = collisionManager.Instance.getHovered(new Vector2(screenX,ImageEditor.Instance.ScreenSize.y - screenY));
+		
 		if(collision != null) {
 			collision.onHovered();
-		_currentlyHoverable = collision;
-		}
+			_currentlyHoverable = collision;
+			}
+		
+		if(_currentlyHoverable != null && _currentlyHoverable != collision) {
+			_currentlyHoverable.onHoveredExit();
+			}
+
+		
+		if(collision != _currentlyHoverable) {
+		_currentlyHoverable = null;
+	}
+		
+
 		
 		return true;
 	}

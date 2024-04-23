@@ -1,6 +1,9 @@
-package com.mygdx.imageeditor;
+package Utility;
 
 import com.badlogic.gdx.math.Vector2;
+import com.mygdx.buttons.Button;
+import com.mygdx.imageeditor.InputManager;
+import com.mygdx.imageeditor.Rec2D;
 
 public class CollisionManager {
 	public CollisionManager Instance;
@@ -33,6 +36,7 @@ public class CollisionManager {
 		
 		for(int i = 0; i < InputManager.Instance.ClickableItem.size; i++) {
 			clicked = (Rec2D) InputManager.Instance.ClickableItem.get(i);
+			
 		if(coordinates.x > clicked.Position.x 
 				&& coordinates.x < (clicked.Position.x + clicked.Scale.x)) {
 					if(coordinates.y > clicked.Position.y 
